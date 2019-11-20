@@ -17,13 +17,13 @@ def create_dataset():
     X, y = sklearn.datasets.make_moons(num_samples, noise=0.20)
 
     # define train, validation, and test sets
-    X_tr = X[:50].astype('float32')
-    X_val = X[50:400].astype('float32')
+    X_tr = X[:100].astype('float32')
+    X_val = X[100:400].astype('float32')
     X_te = X[400:].astype('float32')
 
     # and labels
-    y_tr = y[:50].astype('int32')
-    y_val = y[50:400].astype('int32')
+    y_tr = y[:100].astype('int32')
+    y_val = y[100:400].astype('int32')
     y_te = y[400:].astype('int32')
 
     #plt.scatter(X_tr[:,0], X_tr[:,1], s=40, c=y_tr, cmap=plt.cm.Spectral)
@@ -111,12 +111,18 @@ class ChildNet():
         train_losses = []
         net = Net(hidd_units_layers, self.num_features, self.num_output, self.layer_limit)
         optimizer = optim.Adam(net.parameters(), lr=0.001)
+        max_val_acc = 0
+        
+        # get training input and expected output as torch Variables and make sure type is correct
+        tr_input = Variable(torch.from_numpy(self.X_tr))
+        tr_targets = Variable(torch.from_numpy(self.y_tr))
+
+        # get validation input and expected output as torch Variables and make sure type is correct
+        val_input = Variable(torch.from_numpy(self.X_val))
+        val_targets = Variable(torch.from_numpy(self.y_val))
 
         # training loop
         for e in range(num_epochs):
-            # get training input and expected output as torch Variables and make sure type is correct
-            tr_input = Variable(torch.from_numpy(self.X_tr))
-            tr_targets = Variable(torch.from_numpy(self.y_tr))
 
             # zeroize accumulated gradients in parameters
             optimizer.zero_grad()
@@ -131,19 +137,21 @@ class ChildNet():
             # update the parameters given the computed gradients
             optimizer.step()
             
-        #AFTER TRAINING
-        # get validation input and expected output as torch Variables and make sure type is correct
-        val_input = Variable(torch.from_numpy(self.X_val))
-        val_targets = Variable(torch.from_numpy(self.y_val))
+            if num_epochs - e < 6:
+                #AFTER TRAINING
 
-        # predict with validation input
-        val_output = net(val_input)
-        # compute loss and accuracy
-        val_loss = self.criterion(val_output.float(), val_targets.long())
-        val_acc = accuracy(val_output, val_targets)
-        
-        #reset weights
-        net.apply(weight_reset)
-        
+                # predict with validation input
+                val_output = net(val_input)
+                # compute loss and accuracy
+                val_loss = self.criterion(val_output.float(), val_targets.long())
+                val_acc = accuracy(val_output, val_targets)
+                val_acc = float(val_acc.numpy())
+                
+                if val_acc > max_val_acc:
+                	max_val_acc = val_acc
+                
+                #reset weights
+                net.apply(weight_reset)
+            
         #return float(val_acc.numpy()), num_epochs, val_loss, train_losses, val_output, val_targets #-float(val_loss.detach().numpy()) 
-        return float(val_acc.numpy()) #-float(val_loss.detach().numpy()) 
+        return max_val_acc**3 #-float(val_loss.detach().numpy()) 
