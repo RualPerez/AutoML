@@ -34,7 +34,7 @@ Once the whole steps have run successfully, the next times you only need to run 
 | Policy_Gradient_AutoML.ipynb | Jupyter Notebook designed to help users to understand how this project has been developed |
 | article.pdf | Basic article that describes the principles of this project (theory-related). Here it can be found the **results**. |
 | requirements.txt | Version of the python libraries necessary to run the main script  |
-| images/ | Auxiliar images to write this readme file |
+| images/ | Images used for the article |
 
 
 
