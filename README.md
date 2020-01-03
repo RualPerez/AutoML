@@ -21,5 +21,21 @@ How to run the pipeline:
 Note that you can get a help of how to run the main script by:
 ```python3 main.py -h```
 
+Once the whole steps have run successfully, the next times you only need to run the last step 5. 
+
+**Output**: The main script saves the trained policy/controller net as policy.pt
+
 ## File description
+
+| File / Folder | Description |
+| ----------- | ----------- |
+| main.py | Main script with runs the AutoML experiment |
+| *.py | An auxiliar script necessary to run main.py, its detailed description has been written as python documentation  |
+| Policy_Gradient_AutoML.ipynb | Jupyter Notebook designed to help users to understand how this project has been developed |
+| article.pdf | Basic article that describes the principles of this project (theory-related). Here it can be found the **results**. |
+| requirements.txt | Version of the python libraries necessary to run the main script  |
+| images/ | Auxiliar images to write this readme file |
+
+
+
 
