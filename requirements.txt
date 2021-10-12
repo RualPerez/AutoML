@@ -63,7 +63,7 @@ nltk==3.4.5
 notebook==6.0.1
 numpy==1.17.3
 olefile==0.45.1
-opencv-python==4.1.1.26
+opencv-python==4.2.0.32
 pandas==0.25.1
 pandocfilters==1.4.2
 parso==0.5.1
